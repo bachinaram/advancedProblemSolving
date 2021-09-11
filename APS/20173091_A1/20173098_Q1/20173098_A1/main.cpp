@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-#include<sstream>
+#include <sstream>
 
 using namespace std;
 int current_pos=0;
@@ -47,7 +47,7 @@ string readLine(string input,int pos){
     string result;
     auto inp_str_len = input.length();
     for (int i=pos;i<inp_str_len;i++){
-        if(input[i]=='+' || input[i]=='-' || input[i]=='*'){
+        if(input[i]=='+' || input[i]=='-' || input[i]=='x'){
             current_pos=i+1;
             break;
         }
@@ -105,6 +105,12 @@ string addMulFunc(string first,string second){
     return res_string;
 }
 
+int stringToInt(string st1){
+    int result;
+    stringstream mystream(st1);
+    mystream >> result;
+    return result;
+}
 
 string difference(string first,string second){
     int siz_of_str1 = first.length();
@@ -138,15 +144,52 @@ string difference(string first,string second){
     reverse(result.begin(), result.end());
     return result;
 }
-
-
-string gcd_of_two_numbers(string first, string second){
-    unsigned long siz_of_str1 = first.length();
-    unsigned long siz_of_str2 = second.length();
-    
-    
-    return "abc";
+//--
+int gcd(long long int f, long long int s) {
+    if (f < s) {
+        f = s;
+        s = f;
+    }
+    if (f % s == 0){
+        return s;
+    }
+    else{
+        f = f%s;
+    }
+    return gcd(s, f);
 }
+
+
+int mod_large(string first, long long int my_second_number) {
+    int remainder,existing,res;
+    int secondRemainder = 1000000 % my_second_number;
+    string reverseSix;
+    int siz_of_str1 = first.length();
+    if (siz_of_str1 <= 6) {
+        existing = stringToInt(first);
+        res = existing % my_second_number;
+        return res;
+    }
+    reverseSix = first.substr(siz_of_str1-6, 6);
+    first = first.substr(0, siz_of_str1-6);
+    remainder = stringToInt(reverseSix);
+    int modulusRemainder = remainder % my_second_number;
+    return (mod_large(first, my_second_number)*secondRemainder+modulusRemainder)%my_second_number;
+}
+
+int gcd_of_two_numbers(string first, string second) {
+    int result1;
+    long long int my_second_number = stoll(second, nullptr, 10);
+    long long int gcd_out = mod_large(first, my_second_number);
+    if (gcd_out == 0){
+        return my_second_number;
+    }
+    result1= gcd(my_second_number, gcd_out);
+    return result1;
+}
+
+
+
 //---------
 
 
@@ -182,6 +225,26 @@ void factorial(long long int userinput)
     
 }
 
+//==
+string exponent_fun(int base,int exponent){
+    string result;
+    int initial_output = 0;
+    int output[3000];
+    int ref_var = base;
+     
+    // Initialize result
+    while (ref_var != 0) {
+        output[initial_output++] = ref_var % 10;
+        ref_var = ref_var / 10;
+    }
+    for (int i = 2; i <= exponent; i++){
+        initial_output = crossWithEverythingInArray(base, output, initial_output);
+    }
+    for (int i = initial_output - 1; i >= 0; i--){
+        result+=to_string(output[i]);
+    }
+    return result;
+}
 
 int main() {
     int operation;
@@ -242,14 +305,16 @@ int main() {
                 cout << "1" <<endl;
             }
             else{
-                //exponent_fun(base_x,exponent_n);
+                string final_exp_out;
+                final_exp_out=exponent_fun(base_x,exponent_n);
+                cout << final_exp_out<<endl;
+                
             }
         }
         else if (operation == 2){
             string first_str,second_str,result_gcd;
             cin >> first_str >>second_str;
-            result_gcd=gcd_of_two_numbers(first_str,second_str);
-            cout << result_gcd << endl;
+            cout << gcd_of_two_numbers(first_str,second_str)<<endl;
         }
         else if (operation == 3){
             long long int fact;

@@ -52,8 +52,6 @@ void evictNode(LFUNode* Lfuhead)
     if (nextNode) {
         nextNode->lfu_begining = NULL;
     }
-    cout << "A key is being evicted" << endl;
-    cout << "key-->" << Lfuhead->myKey << " val-->" << Lfuhead->myValue << endl;
     Lfuhead = Lfuhead->lfu_ending;
 }
 
@@ -328,16 +326,5 @@ int main(int argc, const char * argv[]) {
     else{
         cout<<"Please press only a or b characters for LRU and LFU selection"<<endl;
     }
-    /*LRUCache cache(2);    // cache capacity 2
-    cache.put(2,2);
-    cout << cache.get(2) << endl;
-    cout << cache.get(1) << endl;
-    cache.put(1,1);
-    cache.put(1,5);
-    cout << cache.get(1) << endl;
-    cout << cache.get(2) << endl;
-    cache.put(8,8);
-    cout << cache.get(1) << endl;
-    cout << cache.get(8) << endl;*/
     return 0;
 }
